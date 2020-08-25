@@ -44,5 +44,23 @@ export class Pawn extends Piece {
     constructor(isWhite){
         super(isWhite, 
             (isWhite ? "https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" : "https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg"));
+        this.whiteStartPositions = [48, 49, 50, 51, 52, 53, 54, 55]
+        this.blackStartPositions = [8, 9, 10, 11, 12, 13, 14, 15]
+    }
+    isMovePossible(start, end, opponentSquare) {
+        if (this.isWhite) {
+            if (!opponentSquare && ((end == start - 8) || (this.whiteStartPositions.includes(start) && end == start - 16))) {
+                return true
+            }
+            else if (opponentSquare && end == start - 7 || end === start - 9)
+                return true
+        }
+        else if (!opponentSquare && ((end == start + 8) || (this.blackStartPositions.includes(start) && end == start + 16))) {
+                return true
+            }
+        else if (opponentSquare && end == start + 7 || end === start + 9) {
+                return true
+        }
+        return false
     }
 }
