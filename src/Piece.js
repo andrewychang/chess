@@ -34,14 +34,14 @@ export class Queen extends Piece {
             (isWhite ? "https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg" : "https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg"));
     }
 
-    possibleMove(start, end, opponentSquare) {
+    possibleMove(start, end) {
         const rightDiagFactor = 7 - (start % 8)
-        for (var i = start - (7 * rightDiagFactor); i <= start + (7 * (8 - rightDiagFactor)); i += 7) {
+        for (let i = start - (7 * rightDiagFactor); i <= start + (7 * (8 - rightDiagFactor)); i += 7) {
             if (i === end)
                 return true
         }
         const leftDiagFactor = start % 8
-        for (i = start - (9 * leftDiagFactor); i <= start + (9 * (8 - leftDiagFactor)); i += 9) {
+        for (let i = start - (9 * leftDiagFactor); i <= start + (9 * (8 - leftDiagFactor)); i += 9) {
             if (i === end)
                 return true
         }
@@ -49,7 +49,23 @@ export class Queen extends Piece {
     }
 
     getPath(start, end) {
-        
+        var path = [], increment
+        if (start > end) {
+            var temp = end
+            end = start
+            start = temp
+        }
+        if ((end - start) % 7 === 0)
+            increment = 7
+        else if ((end - start) % 9 === 0)
+            increment = 9
+        else if (start % 8 === end % 8)
+            increment = 8
+        else
+            increment = 1
+        for (let i = start + increment; i < end; i += increment)
+            path.push(i)
+        return path
     }
 
 }
@@ -62,13 +78,13 @@ export class Bishop extends Piece {
 
     possibleMove(start, end) {
         const rightDiagFactor = 7 - (start % 8)
-        for (var i = start - (7 * rightDiagFactor); i <= start + (7 * (8 - rightDiagFactor)); i += 7) {
+        for (let i = start - (7 * rightDiagFactor); i <= start + (7 * (8 - rightDiagFactor)); i += 7) {
             if (i === end) {
                 return true
             }
         }
         const leftDiagFactor = start % 8
-        for (i = start - (9 * leftDiagFactor); i <= start + (9 * (8 - leftDiagFactor)); i += 9) {
+        for (let i = start - (9 * leftDiagFactor); i <= start + (9 * (8 - leftDiagFactor)); i += 9) {
             if (i === end) {
                 return true
             }
@@ -76,7 +92,16 @@ export class Bishop extends Piece {
     }
 
     getPath(start, end) {
-        return []
+        var path = [], increment
+        if (start > end) {
+            var temp = end
+            end = start
+            start = temp
+        }
+        (end - start) % 7 === 0 ? increment = 7 : increment = 9
+        for (let i = start + increment; i < end; i += increment)
+            path.push(i)
+        return path
     }
 }
 
@@ -88,6 +113,19 @@ export class Rook extends Piece {
 
     possibleMove(start, end) {
         return (start % 8 === end % 8 || Math.floor(start / 8) === Math.floor(end / 8))
+    }
+
+    getPath(start, end) {
+        var path = [], increment
+        if (start > end) {
+            var temp = end
+            end = start
+            start = temp
+        }
+        end % 8 === start % 8 ? increment = 8 : increment = 1
+        for (let i = start + increment; i < end; i += increment)
+            path.push(i)
+        return path
     }
 }
 

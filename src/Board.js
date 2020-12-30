@@ -41,19 +41,23 @@ export default class Board extends React.Component {
             this.setState({
                 startSquare: i
             })
-            return;
+            return
         }
         if (this.state.startSquare > -1) {
-            var flag = false
-            if (squares[i] && squares[this.state.startSquare].possibleMove(this.state.startSquare, i, true)) {
-                const captured = this.state.captured.slice()
-                captured.push(squares[i])
-                this.setState({
-                    captured: captured
-                })
-                flag = true
-            }
-            if (flag || (this.state.startSquare > -1 && squares[this.state.startSquare].possibleMove(this.state.startSquare, i, false) && !squares[i])) {
+            if ((squares[i] && squares[this.state.startSquare].possibleMove(this.state.startSquare, i, true)) || (squares[this.state.startSquare].possibleMove(this.state.startSquare, i, false) && !squares[i])) {
+                const path = squares[this.state.startSquare].getPath(this.state.startSquare, i)
+                console.log(path)
+                for (let j = 0; j < path.length; j++) {
+                    if (squares[path[j]])
+                        return
+                }
+                if (squares[i]) {
+                    const captured = this.state.captured.slice()
+                    captured.push(squares[i])
+                    this.setState({
+                        captured: captured
+                    })
+                }
                 squares[i] = squares[this.state.startSquare]
                 squares[this.state.startSquare] = null
                 this.setState({
