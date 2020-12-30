@@ -8,12 +8,9 @@ export default class Board extends React.Component {
         this.state = {
             squares: Array(64).fill(null),
             playerWhite: true,
-            startSquare: -1
+            startSquare: -1,
+            captured: Array(32).fill(null)
         }
-        this.placePieces()
-    }
-
-    placePieces() {
         this.state.squares[60] = new King(true)
         this.state.squares[59] = new Queen(true)
         this.state.squares[58] = new Bishop(true)
@@ -46,17 +43,25 @@ export default class Board extends React.Component {
             })
             return;
         }
-        if (this.state.startSquare > -1 && !squares[i]) {
-            if (squares[this.state.startSquare].isMovePossible(this.state.startSquare, i, false)) {
+        if (this.state.startSquare > -1) {
+            var flag = false
+            if (squares[i] && squares[this.state.startSquare].possibleMove(this.state.startSquare, i, true)) {
+                const captured = this.state.captured.slice()
+                captured.push(squares[i])
+                this.setState({
+                    captured: captured
+                })
+                flag = true
+            }
+            if (flag || (this.state.startSquare > -1 && squares[this.state.startSquare].possibleMove(this.state.startSquare, i, false) && !squares[i])) {
                 squares[i] = squares[this.state.startSquare]
                 squares[this.state.startSquare] = null
                 this.setState({
                     squares: squares,
                     startSquare: -1,
-                    playerWhite: !this.state.playerWhite
+                    playerWhite: !this.state.playerWhite,
                 })
             }
-            return;
         }
     }
 
